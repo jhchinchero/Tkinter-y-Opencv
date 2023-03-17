@@ -1,5 +1,9 @@
 from tkinter import Tk, Label, Button
 import os
+import cv2
+import threading
+import imutils
+from PIL import Image, ImageTk
 
 class Window():
 	def __init__(self):
@@ -9,19 +13,38 @@ class Window():
 		self.label = Label(self.window, text="Imagen de la camara")
 		self.label.place(x=10,y=10)
 
-		btn_on = Button(self.window, text="Iniciar Camara", command=self.on_camera)
-		btn_on.place(x=10, y=300)
+		btn_on = Button(self.window, text="Iniciar Camara", command=self.init_camera)
+		btn_on.place(x=10, y=320)
 		btn_close = Button(self.window, text="Salir del programa", command=self.close)
 		btn_close.place(x=10,y=350)
 
+		self.capture = cv2.VideoCapture(0)
+
 		self.window.mainloop()
+	def init_camera(self):
+
+		thread = threading.Thread(target=self.on_camera, args=())
+		thread.start()
 
 	def on_camera(self):
-		print("camera")
+		while True:
+			ret, frame = self.capture.read()
+			if ret == False:
+				print("Error en la camara")
+				break
+			frame = cv2.flip(frame, 1)
+			frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+			frame = imutils.resize(frame, width=400)
+
+			image = Image.fromarray(frame)
+			image = ImageTk.PhotoImage(image)
+			self.label.configure(image=image)
+			self.label.image = image
+
 
 	def close(self):
 		self.window.destroy()
 		os._exit(0)
-		
+
 if __name__ == '__main__':
 	Window()
