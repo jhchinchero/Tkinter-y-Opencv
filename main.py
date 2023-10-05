@@ -47,7 +47,7 @@ class Window():
 		self.label.configure(image="")
 		self.label.image=""
 		self.capture.release()
-		print("camara apagada")
+		#print("camara apagada")
 	def close(self):
 		self.window.destroy()
 		os._exit(0)
