@@ -32,7 +32,7 @@ class Window():
 		while True:
 			ret, frame = self.capture.read()
 			if ret == False:
-				print("Camara apagada")
+				#print("Camara apagada")
 				break
 			frame = cv2.flip(frame, 1)
 			frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
